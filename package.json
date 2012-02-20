@@ -1,0 +1,21 @@
+{
+  "author": "fish <zhengxinlin@gmail.com> (https://github.com/fishbar)",
+  "name": "xfs",
+  "description": "extends fs module",
+  "version": "0.1.1",
+  "homepage": "https://github.com/fishbar/xfs",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fishbar/xfs.git"
+  },
+  "main": "xfs.js",
+  "scripts": {
+    "test": "mocha xfs_test.js"
+  },
+  "engines": {
+    "node": ">0.6.0"
+  },
+  "dependencies": {},
+  "devDependencies": {},
+  "optionalDependencies": {}
+}
