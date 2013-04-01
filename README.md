@@ -9,4 +9,6 @@ xfs extends the following functions :
 
   ... to be contine
 
+## License
 
+  MIT
