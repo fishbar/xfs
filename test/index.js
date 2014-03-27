@@ -2,6 +2,7 @@ var jsc = require('jscoverage');
 require = jsc.mock(module);
 var expect = require('expect.js');
 require('../lib/async', true);
+require('../lib/sync', true);
 var xfs = require('../index', true);
 var fs = require('fs');
 
@@ -100,6 +101,66 @@ describe("xfs.rename()", function () {
           done();
         });
       });
+    });
+  });
+  it('should be ok when fs.rename error', function (done) {
+    xfs.writeFileSync('/tmp/test.txt', 'hello');
+    var orig_rename = fs.rename;
+    fs.rename = function (a, b, cb) {
+      var e = new Error('mock')
+      e.code = 'EXDEV';
+      cb(e);
+    }
+    xfs.rename('/tmp/test.txt', './test.txt', function (err) {
+      expect(err).to.be(null);
+      xfs.stat('/tmp/test.txt', function (err) {
+        expect(err.code).to.be('ENOENT');
+        expect(xfs.readFileSync('./test.txt').toString()).to.be('hello');
+        xfs.unlink('./test.txt', function () {
+          fs.rename = orig_rename;
+          done();
+        });
+      });
+    });
+  });
+});
+
+describe('xfs.sync()', function () {
+  before(function (done) {
+    xfs.sync().rm('./tdir/sync');
+    done();
+  });
+  describe('save', function () {
+    it('should ok when save file to exists path', function () {
+      xfs.sync().save('./tdir/sync/test.txt', 'abc');
+      expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abc');
+    });
+    it('should ok when save file with option to exist file', function() {
+      xfs.sync().save('./tdir/sync/test.txt', 'def', {flag: 'a'});
+      expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abcdef');
+    });
+    it('should ok when save file to un-exists path', function () {
+      xfs.sync().save('./tdir/sync/a/b/c/d.txt', 't');
+      expect(xfs.readFileSync('./tdir/sync/a/b/c/d.txt').toString()).to.be('t');
+    });
+  });
+  describe('mkdir', function () {
+    it('should be ok when path not exist', function (){
+      var path = './tdir/sync/test';
+      xfs.sync().mkdir(path);
+      var stat = xfs.statSync(path);
+      expect(stat.isDirectory()).to.be(true);
+    });
+    it('should be ok when path already exists', function () {
+      var path = './tdir/sync/test';
+      xfs.sync().mkdir(path);
+      var stat = xfs.statSync(path);
+      expect(stat.isDirectory()).to.be(true);
+    });
+  });
+  describe('rm', function () {
+    it('should be ok when rm un-exists file', function () {
+      xfs.sync().rm('./tdir/undefined/abc/');
     });
   });
 });

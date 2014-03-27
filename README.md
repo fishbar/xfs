@@ -1,5 +1,6 @@
-xfs [![Build Status](https://secure.travis-ci.org/fishbar/xfs.png)](http://travis-ci.org/fishbar/xfs)
-=====================
+xfs
+======
+[![Build Status](https://secure.travis-ci.org/fishbar/xfs.png)](http://travis-ci.org/fishbar/xfs)
 xfs is a module extends builded-in fs module.
 
 xfs extends the following functions :

@@ -1,14 +1,24 @@
 var Fs = require('fs');
-var xfs_async = require('./lib/async');
-var xfs_sync = require('./lib/sync');
+var fAsync = require('./lib/async');
+var fSync = require('./lib/sync');
+
+var syncFunc = {};
 /**
  * extends function from Fs, exclude override
  */
 for (var i in Fs) {
   if (Fs.hasOwnProperty(i)) {
     exports[i] = Fs[i];
+    if (i.indexOf('Sync') !== -1) {
+      syncFunc[i] = Fs[i];
+    }
   }
 }
+
+syncFunc.save = fSync.writeFile;
+syncFunc.mkdir = fSync.mkdir;
+syncFunc.rmdir = fSync.rm;
+syncFunc.rm = fSync.rm;
 
 /**
  * rmdir 递归删除目录，异步回调
@@ -16,28 +26,33 @@ for (var i in Fs) {
  * @param path    file path
  * @param callback
  */
-exports.rmdir = xfs_async.rm;
-exports.rm = xfs_async.rm;
+exports.rmdir = fAsync.rm;
+exports.rm = fAsync.rm;
 /**
  * mkdir 递归的创建目录，异步回调
  *         如果文件目录存在，则默认返回成功
  * @param path
  * @param callback
  */
-exports.mkdir = xfs_async.mkdir;
+exports.mkdir = fAsync.mkdir;
 /**
  * rename 移动文件,异步回调，支持跨device移动
  * @param {path} src 
  * @param {path} dest 
  * @param {function} cb
  **/
-exports.rename = xfs_async.mv;
-exports.mv = xfs_async.mv;
+exports.rename = fAsync.mv;
+exports.mv = fAsync.mv;
 
 /**
- * writeTo 写文件，如果目录不存在自动创建
+ * save 保存到文件，如果目录不存在自动创建
  * @param {path} path
  * @param {String|Buffer} data
  * @param {Function} cb(err);
  */
-exports.writeFile = xfs_async.writeFile;
+exports.save = fAsync.writeFile;
+exports.writeFile = fAsync.writeFile;
+
+exports.sync = function () {
+  return syncFunc;
+};
