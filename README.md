@@ -15,6 +15,11 @@ xfs extends the following functions :
 
 
 ## sync functions
+
+  * rm(path)
+  * mkdir(path)
+  * save(path, data[, options|encoding])
+  
 ```js
 var sync = xfs.sync();
 // shell > rm -r path
@@ -22,7 +27,10 @@ sync.rm(path);
 // shell > mkdir -p path
 sync.mkdir(path);
 // save file auto create dir if not exist
-sync.save(path, data, option);
+// node >= v0.10.0
+sync.save(path, data, option); // when node >= v0.10.0, the last param is option
+sync.save(path, data, encoding); // when node < v0.10.0, the last param is encoding
+
 ```
   ... to be contine
 

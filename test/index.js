@@ -135,10 +135,12 @@ describe('xfs.sync()', function () {
       xfs.sync().save('./tdir/sync/test.txt', 'abc');
       expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abc');
     });
-    it('should ok when save file with option to exist file', function() {
-      xfs.sync().save('./tdir/sync/test.txt', 'def', {flag: 'a'});
-      expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abcdef');
-    });
+    if (compareVersion(process.version, 'v0.10.0')) {
+      it('should ok when save file with option to exist file', function() {
+        xfs.sync().save('./tdir/sync/test.txt', 'def', {flag: 'a'});
+        expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abcdef');
+      });
+    }
     it('should ok when save file to un-exists path', function () {
       xfs.sync().save('./tdir/sync/a/b/c/d.txt', 't');
       expect(xfs.readFileSync('./tdir/sync/a/b/c/d.txt').toString()).to.be('t');
@@ -164,3 +166,25 @@ describe('xfs.sync()', function () {
     });
   });
 });
+
+function compareVersion(v0, v1) { 
+  v0 = v0.split('.');
+  v1 = v1.split('.');
+  if (v0[0] > v1[0]) {
+    return true;
+  } else if (v0[0] < v1[1]) {
+    return false;
+  }
+  var tmp = parseInt(v0[1], 10) - parseInt(v1[1], 10);
+  if (tmp > 0) {
+    return true;
+  } else if (tmp < 0){
+    return false;
+  }
+  tmp = parseInt(v0[2], 10) - parseInt(v1[2], 10);
+  if (tmp >= 0) {
+    return true;
+  } else {
+    return false;
+  }
+}
