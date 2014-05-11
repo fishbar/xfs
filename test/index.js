@@ -1,14 +1,8 @@
-var jsc = require('jscoverage');
-require = jsc.mock(module);
 var expect = require('expect.js');
 require('../lib/async', true);
 require('../lib/sync', true);
 var xfs = require('../index', true);
 var fs = require('fs');
-
-process.on('exit', function () {
-  jsc.coverage();
-});
 
 process.chdir(__dirname);
 
@@ -110,7 +104,7 @@ describe("xfs.rename()", function () {
       var e = new Error('mock')
       e.code = 'EXDEV';
       cb(e);
-    }
+    };
     xfs.rename('/tmp/test.txt', './test.txt', function (err) {
       expect(err).to.be(null);
       xfs.stat('/tmp/test.txt', function (err) {
@@ -121,6 +115,38 @@ describe("xfs.rename()", function () {
           done();
         });
       });
+    });
+  });
+
+  it('should ok when walk through dir', function (done) {
+    xfs.sync().save('./walk/a.js', '');
+    xfs.sync().save('./walk/b/c.js', '');
+    xfs.sync().mkdir('./walk/a');
+    var arr = [];
+    xfs.walk('./walk', function (err, file, done) {
+      arr.push(file);
+      done();
+    }, function () {
+      expect(arr.length).to.be(3);
+      expect(arr[0]).to.match(/a\.js/);
+      expect(arr[1]).to.match(/c\.js/);
+      done();
+    });
+  });
+
+  it('should ok when walk through dir with filter', function (done) {
+    xfs.sync().save('./walk/a.js', '');
+    xfs.sync().save('./walk/b/c.js', '');
+    xfs.sync().save('./walk/b/d.css', '');
+    var arr = [];
+    xfs.walk('./walk', /\.js/, function (err, file, done) {
+      arr.push(file);
+      done();
+    }, function () {
+      expect(arr.length).to.be(2);
+      expect(arr[0]).to.match(/a\.js/);
+      expect(arr[1]).to.match(/c\.js/);
+      done();
     });
   });
 });
@@ -167,7 +193,7 @@ describe('xfs.sync()', function () {
   });
 });
 
-function compareVersion(v0, v1) { 
+function compareVersion(v0, v1) {
   v0 = v0.split('.');
   v1 = v1.split('.');
   if (v0[0] > v1[0]) {

@@ -6,6 +6,6 @@ install:
 	@npm install
 
 test: install
-	@$(MOCHA) ./test --coverage
+	@$(MOCHA) -r jscoverage ./test
 	
 .PHONY: instal test

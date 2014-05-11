@@ -53,6 +53,8 @@ exports.mv = fAsync.mv;
 exports.save = fAsync.writeFile;
 exports.writeFile = fAsync.writeFile;
 
+exports.walk = fAsync.walk;
+
 exports.sync = function () {
   return syncFunc;
 };

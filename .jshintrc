@@ -15,7 +15,7 @@
     "beforeEach",
     "after",
     "afterEach",
-    "expect",
+    "expect"
   ],
   "bitwise": true,
   "curly": true,

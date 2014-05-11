@@ -12,7 +12,20 @@ xfs extends the following functions :
   * mkdir(path,cb) make directories and their contents recursively
   * rmdir(path,cb) remove directories and their contents recursively
   * rename(src,dest,cb) rename file across two different devices
+  * walk(dir, expr, each, done); walk through dir, each file will pass to each() , when walk done, done() called
 
+```js
+// walk traverse through files in the dir one by one
+// get only js files in dir
+fs.walk(dir, /\.js$/, function (err, file, done) {
+  // your code here
+
+  // in the end , must call done()
+  done();
+}, function (err) {
+  // your code
+});
+```
 
 ## sync functions
 
