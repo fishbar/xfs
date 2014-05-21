@@ -84,6 +84,9 @@ describe('xfs.rmdir()', function () {
 });
 
 describe("xfs.rename()", function () {
+  before(function () {
+    xfs.sync().rm('./walk');
+  });
   it('should be ok when move file', function (done) {
     xfs.writeFileSync('/tmp/test.txt', 'hello');
     xfs.rename('/tmp/test.txt', './test.txt', function (err) {
@@ -127,7 +130,7 @@ describe("xfs.rename()", function () {
       arr.push(file);
       done();
     }, function () {
-      expect(arr.length).to.be(3);
+      expect(arr.length).to.be(2);
       expect(arr[0]).to.match(/a\.js/);
       expect(arr[1]).to.match(/c\.js/);
       done();
