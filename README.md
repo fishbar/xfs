@@ -25,6 +25,12 @@ fs.walk(dir, /\.js$/, function (err, file, done) {
 }, function (err) {
   // your code
 });
+
+// or you can save the done function
+
+fs.walk(dir, /\.js$/, function (err, file){
+  // your code here
+});
 ```
 
 ## sync functions

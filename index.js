@@ -3,7 +3,7 @@ var fAsync = require('./lib/async');
 var fSync = require('./lib/sync');
 
 var syncFunc = {};
-/**
+/** 
  * extends function from Fs, exclude override
  */
 for (var i in Fs) {

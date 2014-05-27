@@ -84,7 +84,7 @@ describe('xfs.rmdir()', function () {
 });
 
 describe("xfs.rename()", function () {
-  before(function () {
+  beforeEach(function () {
     xfs.sync().rm('./walk');
   });
   it('should be ok when move file', function (done) {
@@ -151,6 +151,39 @@ describe("xfs.rename()", function () {
       expect(arr[1]).to.match(/c\.js/);
       done();
     });
+  });
+
+  it('should ok when walk through when cb without done function', function (done) {
+    var arr = [];
+    xfs.sync().save('./walk/a.js', '');
+    xfs.sync().save('./walk/b.js', '');
+    xfs.walk('./walk', function (err, file) {
+      arr.push(file);
+    }, function () {
+      expect(arr.length).to.be(2);
+      expect(arr[0]).to.match(/a\.js/);
+      done();
+    });
+  });
+
+  it('should ok when walk through when on done function', function (done) {
+    var arr = [];
+    xfs.sync().save('./walk/a.js', '');
+    xfs.walk('./walk', function (err, file) {
+      arr.push(file);
+    });
+    setTimeout(function () {
+      expect(arr.length).to.be(1);
+      expect(arr[0]).to.match(/a\.js/);
+      done();
+    }, 50);
+  });
+
+  it('should ok when walk through when on done function', function (done) {
+    var arr = [];
+    xfs.walk('./walk', function (err, file) {
+
+    }, done);
   });
 });
 
