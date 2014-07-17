@@ -53,6 +53,8 @@ sync.save(path, data, encoding); // when node < v0.10.0, the last param is encod
 ```
   ... to be contine
 
+## symlink file, rm will failed
+
 ## License
 
   MIT
