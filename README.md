@@ -26,6 +26,16 @@ fs.walk(dir, /\.js$/, function (err, file, done) {
   // your code
 });
 
+// function walk() can also accept an `function type` expr
+fs.walk(dir, function (fpath) {
+  // return bool, true means accept, false means ignore
+  return true
+}, function (err, file, done) {
+
+}, function (err) {
+
+});
+
 // or you can save the done function
 
 fs.walk(dir, /\.js$/, function (err, file){
