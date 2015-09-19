@@ -1,4 +1,5 @@
 var expect = require('expect.js');
+var path = require('path');
 require('../lib/async', true);
 require('../lib/sync', true);
 var xfs = require('../index', true);
@@ -32,6 +33,10 @@ describe('xfs.mkdir', function () {
     });
   });
   it('should be failed when path EACCES', function (done) {
+    if (process.platform.indexOf('win') === 0) {
+      // ignore windows platform
+      return done();
+    }
     fs.mkdir('tdir/eaccess', 0644, function () {
       xfs.mkdir('tdir/eaccess/a', function (err) {
         expect(err.code).to.be('EACCES');
@@ -88,10 +93,11 @@ describe("xfs.rename()", function () {
     xfs.sync().rm('./walk');
   });
   it('should be ok when move file', function (done) {
-    xfs.writeFileSync('/tmp/test.txt', 'hello');
-    xfs.rename('/tmp/test.txt', './test.txt', function (err) {
+    var fpath = path.join(process.env.TMP, 'test.txt');
+    xfs.writeFileSync(fpath, 'hello');
+    xfs.rename(fpath, './test.txt', function (err) {
       expect(err).to.be(null);
-      xfs.stat('/tmp/test.txt', function (err) {
+      xfs.stat(fpath, function (err) {
         expect(err.code).to.be('ENOENT');
         expect(xfs.readFileSync('./test.txt').toString()).to.be('hello');
         xfs.unlink('./test.txt', function () {
@@ -101,16 +107,17 @@ describe("xfs.rename()", function () {
     });
   });
   it('should be ok when fs.rename error', function (done) {
-    xfs.writeFileSync('/tmp/test.txt', 'hello');
+    var fpath = path.join(process.env.TMP, 'test.txt');
+    xfs.writeFileSync(fpath, 'hello');
     var orig_rename = fs.rename;
     fs.rename = function (a, b, cb) {
       var e = new Error('mock')
       e.code = 'EXDEV';
       cb(e);
     };
-    xfs.rename('/tmp/test.txt', './test.txt', function (err) {
+    xfs.rename(fpath, './test.txt', function (err) {
       expect(err).to.be(null);
-      xfs.stat('/tmp/test.txt', function (err) {
+      xfs.stat(fpath, function (err) {
         expect(err.code).to.be('ENOENT');
         expect(xfs.readFileSync('./test.txt').toString()).to.be('hello');
         xfs.unlink('./test.txt', function () {
