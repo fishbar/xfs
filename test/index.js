@@ -1,3 +1,10 @@
+/*!
+ * xfs: test/index.js
+ * Authors  : 枫弦 <fengxian.yzg@alibaba-inc.com> (https://github.com/yuzhigang33)
+ * Create   : 2015-11-07 08:16:49
+ * CopyRight 2015 (c) Alibaba Group
+ */
+
 var expect = require('expect.js');
 var path = require('path');
 require('../lib/async', true);
@@ -93,7 +100,8 @@ describe("xfs.rename()", function () {
     xfs.sync().rm('./walk');
   });
   it('should be ok when move file', function (done) {
-    var fpath = path.join(process.env.TMP, 'test.txt');
+    var tmpDir = process.env.TMP || process.env.TMPDIR || '/tmp';
+    var fpath = path.join(tmpDir, 'test.txt');
     xfs.writeFileSync(fpath, 'hello');
     xfs.rename(fpath, './test.txt', function (err) {
       expect(err).to.be(null);
@@ -107,7 +115,8 @@ describe("xfs.rename()", function () {
     });
   });
   it('should be ok when fs.rename error', function (done) {
-    var fpath = path.join(process.env.TMP, 'test.txt');
+    var tmpDir = process.env.TMP || process.env.TMPDIR || '/tmp';
+    var fpath = path.join(tmpDir, 'test.txt');
     xfs.writeFileSync(fpath, 'hello');
     var orig_rename = fs.rename;
     fs.rename = function (a, b, cb) {
