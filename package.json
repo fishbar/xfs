@@ -2,7 +2,7 @@
   "author": "fish <zhengxinlin@gmail.com> (https://github.com/fishbar)",
   "name": "xfs",
   "description": "extends fs module, easy way to manipulate file system, support both sync functions and async functions",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "homepage": "https://github.com/fishbar/xfs",
   "repository": {
     "type": "git",
