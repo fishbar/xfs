@@ -1,7 +1,7 @@
 xfs
 ======
 
-xfs is a module extends builded-in fs module, let file manipulate easily
+xfs is a module extends build-in fs module, let file manipulate easily
 
 [![Build Status](https://secure.travis-ci.org/fishbar/xfs.png)](http://travis-ci.org/fishbar/xfs)
 
