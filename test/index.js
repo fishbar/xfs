@@ -214,7 +214,7 @@ describe('xfs.sync()', function () {
       expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abc');
     });
     if (compareVersion(process.version, 'v0.10.0')) {
-      it('should ok when save file with option to exist file', function() {
+      it('should ok when save file with option to exist file', function () {
         xfs.sync().save('./tdir/sync/test.txt', 'def', {flag: 'a'});
         expect(xfs.readFileSync('./tdir/sync/test.txt').toString()).to.be('abcdef');
       });
@@ -225,7 +225,7 @@ describe('xfs.sync()', function () {
     });
   });
   describe('mkdir', function () {
-    it('should be ok when path not exist', function (){
+    it('should be ok when path not exist', function () {
       var path = './tdir/sync/test';
       xfs.sync().mkdir(path);
       var stat = xfs.statSync(path);
