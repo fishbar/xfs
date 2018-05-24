@@ -7,5 +7,8 @@ install:
 
 test: install
 	@$(MOCHA) -r jscoverage ./test -R spec
-	
+
+test2:
+	@$(MOCHA) ./test -R spec	
+
 .PHONY: instal test
